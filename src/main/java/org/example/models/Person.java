@@ -14,10 +14,7 @@ public class Person {
     public Person() {
     }
 
-    public Person(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
+
 
     public int getId() {
         return id;

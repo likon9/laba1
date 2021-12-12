@@ -3,9 +3,11 @@ package org.example.dao;
 import org.example.models.Person;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Component
 public class PersonDAO {
@@ -29,6 +31,8 @@ public class PersonDAO {
         }
     }
 
+    private static final String CREATE_USER = "INSERT INTO users (login, password)VALUES (?, ?)";
+
     public List<Person> index(){
         List<Person> people = new ArrayList<>();
         try {
@@ -51,9 +55,18 @@ public class PersonDAO {
     }
 
     public boolean save(Person person){
-        System.out.println(person.getLogin());
-        System.out.println(person.getPassword());
-        return  true;
+        boolean result = false;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(CREATE_USER);
+            statement.setString(1, person.getLogin());
+            statement.setString(2, person.getPassword());
+
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
     }
 
 
